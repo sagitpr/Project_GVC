@@ -1,0 +1,46 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  ecoPoints Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  scans     Scan[]
+}
+
+model Scan {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageUrl   String
+  category   String   // PLASTIC, ORGANIC, PAPER, GLASS, ELECTRONIC, METAL, OTHERS
+  confidence Float    // AI confidence percentage (0.0 - 1.0)
+  brand      String?  // OCR brand name result
+  ecoScore   Int      // Eco Score (0 - 100)
+  ocrText    String?  // Raw text extracted by OCR
+  tips       String   // Recycling tips and advice from Gemini API
+  createdAt  DateTime @default(now())
+}
+
+model AnalyticsSummary {
+  id              String   @id @default(uuid())
+  date            DateTime @unique @default(now())
+  totalScans      Int      @default(0)
+  plasticScans    Int      @default(0)
+  organicScans    Int      @default(0)
+  paperScans      Int      @default(0)
+  glassScans      Int      @default(0)
+  electronicScans Int      @default(0)
+  metalScans      Int      @default(0)
+  carbonReduced   Float    @default(0.0) // Estimate in kg of CO2 equivalent
+}
