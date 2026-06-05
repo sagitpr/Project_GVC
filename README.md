@@ -1,4 +1,4 @@
- SMARTSORT AI Ecosystem
+# SMARTSORT AI Ecosystem
 
 SMARTSORT adalah aplikasi yang membantu masyarakat mengenali, memilah, dan menyalurkan sampah ke pihak yang dapat mengolahnya kembali menjadi produk yang bermanfaat.
 
