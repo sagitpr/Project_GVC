@@ -1,69 +1,63 @@
 # SMARTSORT AI Ecosystem
 
-SMARTSORT adalah aplikasi yang membantu masyarakat mengenali, memilah, dan menyalurkan sampah ke pihak yang dapat mengolahnya kembali menjadi produk yang bermanfaat.
+SMARTSORT adalah aplikasi yang dikembangkan untuk membantu masyarakat mengelola material bekas dan sampah dengan cara yang lebih terstruktur melalui bantuan teknologi.
 
-Proyek ini dibuat dengan tujuan mendukung pengelolaan sampah yang lebih terstruktur sekaligus mendorong pemanfaatan kembali material bekas melalui teknologi digital dan Artificial Intelligence.
+Proyek ini berangkat dari permasalahan yang sering ditemui di sekitar kita, yaitu masih banyak material yang sebenarnya bisa dimanfaatkan kembali tetapi berakhir menjadi sampah karena kurangnya informasi, edukasi, dan akses ke pihak yang dapat mengolahnya.
 
-Saat ini SMARTSORT masih berada dalam tahap pengembangan dan terus disempurnakan.
+Melalui SMARTSORT, pengguna dapat mengenali jenis material yang dimiliki, mempelajari cara penanganannya, serta terhubung dengan jaringan pengelolaan dan pemanfaatan material yang lebih tepat.
 
----
-
-Tentang SMARTSORT
-
-Masih banyak masyarakat yang belum mengetahui jenis sampah yang mereka miliki, cara pengelolaannya, ataupun nilai ekonominya. Di sisi lain, banyak bank sampah, UMKM daur ulang, dan perusahaan pengolah yang membutuhkan material bekas sebagai bahan baku.
-
-SMARTSORT hadir sebagai penghubung antara masyarakat dan jaringan pengelola sampah melalui sebuah platform digital yang mudah digunakan.
+«Proyek ini masih dalam tahap pengembangan dan akan terus disempurnakan seiring proses pembelajaran dan pengembangan fitur baru.»
 
 ---
 
-Fitur Utama
+Apa yang Bisa Dilakukan SMARTSORT?
 
-AI Waste Scanner
+AI Scanner
 
-Pengguna dapat mengunggah foto sampah atau material bekas untuk dianalisis.
+Pengguna dapat mengunggah gambar material untuk membantu proses identifikasi dan klasifikasi.
 
-Fitur ini dirancang untuk membantu pengguna mengetahui:
+Fitur ini dikembangkan untuk membantu pengguna mengetahui:
 
-- jenis material
-- kategori sampah
-- potensi daur ulang
-- rekomendasi penanganan
+- Jenis material
+- Kategori sampah
+- Potensi pemanfaatan kembali
+- Informasi pengelolaan yang sesuai
 
 ---
 
 Resource Recovery Network
 
-SMARTSORT tidak berfokus pada jual beli sampah seperti marketplace biasa.
+SMARTSORT tidak dibuat sebagai marketplace jual beli sampah.
 
-Fitur ini bertujuan menghubungkan pengguna dengan:
+Fokus utama fitur ini adalah membangun jaringan yang menghubungkan masyarakat dengan pihak-pihak yang dapat mengelola atau memanfaatkan kembali material yang masih memiliki nilai guna.
 
-- bank sampah
-- mitra pengolah
-- komunitas lingkungan
-- UMKM daur ulang
-- perusahaan pengelola material
+Contohnya:
 
-sehingga material yang masih bernilai dapat dimanfaatkan kembali.
+- Bank Sampah
+- Komunitas Lingkungan
+- UMKM Daur Ulang
+- Mitra Pengolah
+- Pusat Pengelolaan Material
 
 ---
 
 Smart Pickup
 
-Pengguna dapat mengajukan permintaan penjemputan sampah yang telah dipilah.
+Fitur untuk membantu proses penjemputan material yang telah dipilah oleh pengguna.
 
-Fitur ini masih dalam tahap pengembangan dan akan terus disempurnakan.
+Saat ini fitur masih dalam tahap pengembangan dan penyempurnaan.
 
 ---
 
 Eco Wallet
 
-Sistem poin dan penghargaan yang diberikan kepada pengguna berdasarkan aktivitas pengelolaan sampah dan partisipasi dalam program lingkungan.
+Sistem poin yang diberikan berdasarkan aktivitas pengguna dalam mendukung pengelolaan lingkungan.
 
 ---
 
 Community & Education
 
-Menyediakan informasi, edukasi, serta wadah berbagi pengalaman terkait pengelolaan sampah dan lingkungan.
+Bagian ini berisi informasi dan edukasi seputar pengelolaan material, lingkungan, serta kegiatan komunitas yang berkaitan dengan keberlanjutan.
 
 ---
 
@@ -80,7 +74,6 @@ Backend
 
 - NestJS
 - TypeScript
-- REST API
 
 Database
 
@@ -99,37 +92,49 @@ Deployment
 
 ---
 
+Struktur Project
+
+SMARTSORT/
+│
+├── frontend/
+├── backend/
+├── prisma/
+├── docs/
+└── architecture.txt
+
+---
+
 Status Pengembangan
 
-Saat ini beberapa fitur utama sudah dapat dijalankan, sementara beberapa fitur lainnya masih dalam tahap pengembangan dan pengujian.
+Saat ini beberapa fitur utama sudah berhasil dijalankan dan dideploy ke cloud.
 
 Yang sudah tersedia:
 
-- Frontend application
-- Backend API
-- Database integration
 - Authentication
 - Dashboard
-- Cloud deployment
+- Database Integration
+- Cloud Deployment
+- Basic Scanner
+- Analytics
 
-Yang sedang dikembangkan:
+Yang masih dikembangkan:
 
-- AI Scanner Optimization
 - OCR Improvement
-- Resource Recovery Network
-- Pickup Ecosystem
-- Sustainability Analytics
+- AI Classification
+- Smart Pickup
+- Resource Recovery Expansion
+- Community Features
 
 ---
 
 Tujuan Proyek
 
-SMARTSORT dibuat untuk membantu menciptakan pengelolaan sampah yang lebih mudah, terhubung, dan bermanfaat bagi masyarakat.
+SMARTSORT dibuat dengan harapan dapat membantu masyarakat melihat material bekas bukan hanya sebagai sampah, tetapi sebagai sumber daya yang masih memiliki potensi untuk dimanfaatkan kembali.
 
-Harapannya, platform ini dapat menjadi salah satu langkah kecil menuju lingkungan yang lebih bersih serta mendukung ekonomi sirkular di Indonesia.
+Selain itu, proyek ini juga menjadi sarana eksplorasi pemanfaatan teknologi untuk mendukung pengelolaan lingkungan yang lebih baik di masa depan.
 
 ---
 
 Catatan
 
-Proyek ini masih dalam tahap pengembangan aktif. Masukan, saran, dan kontribusi sangat terbuka untuk membantu pengembangan SMARTSORT ke depannya.
+Project ini masih terus berkembang dan terbuka terhadap masukan, kritik, maupun ide pengembangan baru.
