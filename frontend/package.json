@@ -7,22 +7,35 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "axios": "^1.6.7",
+    "clsx": "^2.1.1",
+    "concurrently": "^9.2.1",
+    "framer-motion": "^12.40.0",
+    "lucide-react": "^0.331.0",
     "next": "^14.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "lucide-react": "^0.331.0",
-    "axios": "^1.6.7"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
-    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.18",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "postcss": "^8.4.35",
-    "autoprefixer": "^10.4.18"
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.4.11",
+    "typescript": "^5.3.3"
   }
 }

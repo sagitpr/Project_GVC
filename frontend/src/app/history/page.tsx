@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Loader2, Calendar, FileText, X, Sparkles, Award, Search, Trash2 } from 'lucide-react';
+import { ArrowLeft, Loader2, FileText, X, Sparkles, Award } from 'lucide-react';
 import { scansApi, authApi } from '../../lib/api';
 
 export default function HistoryPage() {
@@ -44,58 +44,58 @@ export default function HistoryPage() {
       case 'GLASS': return 'text-teal-500 bg-teal-50 border-teal-100';
       case 'METAL': return 'text-indigo-500 bg-indigo-50 border-indigo-100';
       case 'ELECTRONIC': return 'text-purple-500 bg-purple-50 border-purple-100';
-      default: return 'text-gray-500 bg-gray-50 border-gray-100';
+      default: return 'text-slate-500 bg-slate-50 border-slate-100';
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-tesla-white flex flex-col justify-center items-center">
-        <Loader2 size={36} className="text-tesla-blue animate-spin mb-4" />
-        <span className="text-xs font-semibold tracking-widest text-tesla-pewter uppercase">Memuat Histori Daur Ulang...</span>
+      <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col justify-center items-center">
+        <Loader2 size={36} className="text-eco-600 animate-spin mb-4" />
+        <span className="text-xs font-semibold tracking-widest text-slate-500 dark:text-slate-400 uppercase">Memuat Histori Daur Ulang...</span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-tesla-white text-tesla-dark selection:bg-tesla-blue selection:text-white pb-24 relative">
+    <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 selection:bg-eco-500 selection:text-white pb-24 relative">
       {/* Background grid details */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(#EEEEEE_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-40" />
 
       {/* Floating Navbar */}
-      <header className="fixed top-0 left-0 w-full z-45 frosted-glass border-b border-tesla-cloud/30 py-4 px-6 md:px-12 flex justify-between items-center">
-        <Link href="/dashboard" className="flex items-center space-x-2 text-xs font-semibold tracking-widest text-tesla-pewter hover:text-tesla-dark uppercase transition-colors">
+      <header className="fixed top-0 left-0 w-full z-40 frosted-glass border-b border-slate-200/60 dark:border-slate-700/60 py-4 px-6 md:px-12 flex justify-between items-center">
+        <Link href="/dashboard" className="flex items-center space-x-2 text-xs font-semibold tracking-widest text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white uppercase transition-colors">
           <ArrowLeft size={16} />
           <span>Dashboard</span>
         </Link>
         <div className="text-sm font-bold tracking-[0.2em] uppercase select-none">
           RIWAYAT PEMILAHAN SAMPAH
         </div>
-        <Link href="/scanner" className="text-xs font-semibold tracking-widest text-tesla-blue hover:underline uppercase">
+        <Link href="/scanner" className="text-xs font-semibold tracking-widest text-eco-600 hover:underline uppercase">
           Scan Baru
         </Link>
       </header>
 
       <main className="max-w-5xl mx-auto pt-24 px-6 relative z-10">
         {errorMsg && (
-          <div className="p-4 bg-red-50 text-red-600 text-xs font-medium rounded-tesla border border-red-100 mb-6">
+          <div className="p-4 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-medium rounded-xl border border-red-100 dark:border-red-800/30 mb-6">
             {errorMsg}
           </div>
         )}
 
         {scans.length === 0 ? (
           /* Empty state view */
-          <div className="text-center py-20 bg-white border border-tesla-cloud/60 rounded-xl p-8 max-w-xl mx-auto shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-tesla-ash flex items-center justify-center text-tesla-pewter mx-auto mb-6">
+          <div className="text-center py-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-8 max-w-xl mx-auto shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 mx-auto mb-6">
               <FileText size={24} />
             </div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-2">Belum Ada Histori Scan</h3>
-            <p className="text-xs text-tesla-pewter leading-relaxed font-light mb-8 max-w-xs mx-auto">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-2 text-slate-900 dark:text-white">Belum Ada Histori Scan</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-light mb-8 max-w-xs mx-auto">
               Anda belum melakukan klasifikasi sampah. Gunakan AI Camera Scanner untuk mendeteksi material dan memperoleh Eco-Points perdana!
             </p>
             <Link 
               href="/scanner"
-              className="bg-tesla-blue hover:bg-[#2b56cc] text-white text-xs font-semibold tracking-widest uppercase px-6 py-4 rounded-tesla transition-colors"
+              className="bg-eco-600 hover:bg-eco-700 text-white text-xs font-semibold tracking-widest uppercase px-6 py-4 rounded-xl transition-colors"
             >
               MULAI SCAN
             </Link>
@@ -107,10 +107,10 @@ export default function HistoryPage() {
               <div 
                 key={scan.id} 
                 onClick={() => setSelectedScan(scan)}
-                className="bg-white border border-tesla-cloud/60 hover:border-tesla-blue/40 rounded-xl overflow-hidden shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 flex flex-col justify-between"
+                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-eco-500/40 rounded-xl overflow-hidden shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 flex flex-col justify-between"
               >
                 {/* Thumbnail */}
-                <div className="aspect-[4/3] bg-tesla-ash relative">
+                <div className="aspect-[4/3] bg-slate-100 dark:bg-slate-700 relative">
                   <img src={scan.imageUrl} className="w-full h-full object-cover" alt="Captured waste" />
                   
                   {/* Category overlay */}
@@ -129,15 +129,15 @@ export default function HistoryPage() {
                   <div className="flex justify-between items-center">
                     <div>
                       {scan.brand ? (
-                        <span className="text-xs font-semibold text-tesla-dark block leading-tight">{scan.brand}</span>
+                        <span className="text-xs font-semibold text-slate-900 dark:text-white block leading-tight">{scan.brand}</span>
                       ) : (
-                        <span className="text-xs text-tesla-pewter italic block leading-tight">No Brand OCR</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 italic block leading-tight">No Brand OCR</span>
                       )}
-                      <span className="text-[9px] text-tesla-pewter font-medium uppercase tracking-wider">Akurasi: {Math.round(scan.confidence * 100)}%</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">Akurasi: {Math.round(scan.confidence * 100)}%</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-bold text-tesla-blue block">Score: {scan.ecoScore}</span>
-                      <span className="text-[9px] text-tesla-pewter uppercase tracking-wider">Eco Score</span>
+                      <span className="text-xs font-bold text-eco-600 block">Score: {scan.ecoScore}</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-wider">Eco Score</span>
                     </div>
                   </div>
                 </div>
@@ -150,14 +150,14 @@ export default function HistoryPage() {
       {/* 4. Sleek Interactive Detail Overlay (Slide out/Modal) */}
       {selectedScan && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex justify-center items-center p-4">
-          <div className="bg-white max-w-xl w-full rounded-xl overflow-hidden border border-tesla-cloud/60 shadow-2xl relative flex flex-col">
+          <div className="bg-white dark:bg-slate-800 max-w-xl w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-2xl relative flex flex-col">
             
             {/* Header */}
-            <div className="p-5 border-b border-tesla-cloud/40 flex justify-between items-center">
-              <span className="text-[10px] font-bold tracking-[0.2em] text-tesla-pewter uppercase block">Detil Pemilahan Sampah</span>
+            <div className="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+              <span className="text-[10px] font-bold tracking-[0.2em] text-slate-500 dark:text-slate-400 uppercase block">Detil Pemilahan Sampah</span>
               <button 
                 onClick={() => setSelectedScan(null)}
-                className="text-tesla-pewter hover:text-tesla-dark transition-colors"
+                className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               >
                 <X size={20} />
               </button>
@@ -166,7 +166,7 @@ export default function HistoryPage() {
             {/* Content Body */}
             <div className="p-6 space-y-6 overflow-y-auto max-h-[75vh]">
               {/* Photo thumbnail */}
-              <div className="aspect-[16/9] w-full rounded-xl overflow-hidden bg-tesla-ash border border-tesla-cloud/40">
+              <div className="aspect-[16/9] w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600">
                 <img src={selectedScan.imageUrl} className="w-full h-full object-cover" alt="Captured item" />
               </div>
 
@@ -174,38 +174,38 @@ export default function HistoryPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-xl font-light text-tesla-dark uppercase tracking-tight leading-none">{selectedScan.category}</h3>
+                    <h3 className="text-xl font-light text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedScan.category}</h3>
                     <span className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 border rounded-full ${getCategoryColor(selectedScan.category)}`}>
                       {Math.round(selectedScan.confidence * 100)}% Match
                     </span>
                   </div>
-                  <span className="text-[10px] text-tesla-pewter font-light">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-light">
                     Discan pada {new Date(selectedScan.createdAt).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
 
-                <div className="text-right flex items-center gap-3 bg-tesla-ash/40 px-4 py-2 rounded-tesla border border-tesla-cloud/40">
-                  <Award size={18} className="text-tesla-blue" />
+                <div className="text-right flex items-center gap-3 bg-slate-100/40 dark:bg-slate-700/40 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600">
+                  <Award size={18} className="text-eco-600 dark:text-eco-400" />
                   <div className="text-left">
-                    <span className="text-[9px] text-tesla-pewter uppercase tracking-wider block font-bold leading-none">Eco Score</span>
-                    <span className="text-sm font-semibold text-tesla-dark">{selectedScan.ecoScore}/100</span>
+                    <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-bold leading-none">Eco Score</span>
+                    <span className="text-sm font-semibold text-slate-900 dark:text-white">{selectedScan.ecoScore}/100</span>
                   </div>
                 </div>
               </div>
 
               {/* OCR Decks if valid */}
               {(selectedScan.brand || selectedScan.ocrText) && (
-                <div className="p-4 bg-tesla-ash/25 border border-tesla-cloud/30 rounded-tesla space-y-3 text-xs leading-relaxed">
+                <div className="p-4 bg-slate-100/25 dark:bg-slate-700/25 border border-slate-200/60 dark:border-slate-600/60 rounded-xl space-y-3 text-xs leading-relaxed">
                   {selectedScan.brand && (
                     <div>
-                      <span className="font-semibold text-tesla-pewter block uppercase text-[9px] tracking-widest mb-0.5">Merek Label Terbaca</span>
-                      <span className="text-tesla-dark font-medium text-sm">{selectedScan.brand}</span>
+                      <span className="font-semibold text-slate-500 dark:text-slate-400 block uppercase text-[9px] tracking-widest mb-0.5">Merek Label Terbaca</span>
+                      <span className="text-slate-900 dark:text-slate-100 font-medium text-sm">{selectedScan.brand}</span>
                     </div>
                   )}
                   {selectedScan.ocrText && (
                     <div>
-                      <span className="font-semibold text-tesla-pewter block uppercase text-[9px] tracking-widest mb-0.5">Teks Kemasan (OCR)</span>
-                      <span className="text-tesla-dark/80 italic font-light">"{selectedScan.ocrText}"</span>
+                      <span className="font-semibold text-slate-500 dark:text-slate-400 block uppercase text-[9px] tracking-widest mb-0.5">Teks Kemasan (OCR)</span>
+                      <span className="text-slate-900/80 dark:text-slate-300/80 italic font-light">"{selectedScan.ocrText}"</span>
                     </div>
                   )}
                 </div>
@@ -213,21 +213,21 @@ export default function HistoryPage() {
 
               {/* Tips */}
               <div className="space-y-2">
-                <h4 className="text-xs font-semibold tracking-wider text-tesla-pewter uppercase flex items-center gap-1.5">
-                  <Sparkles size={14} className="text-tesla-blue" />
+                <h4 className="text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-eco-600" />
                   <span>Panduan Daur Ulang AI</span>
                 </h4>
-                <div className="text-xs text-tesla-graphite leading-relaxed font-light p-4 bg-blue-50/20 border border-blue-100/30 rounded-tesla">
+                <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-light p-4 bg-blue-50/20 dark:bg-blue-900/20 border border-blue-100/30 dark:border-blue-800/30 rounded-xl">
                   {selectedScan.tips}
                 </div>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-tesla-cloud/40 bg-tesla-ash/20 text-center">
+            <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-100/20 dark:bg-slate-700/20 text-center">
               <button 
                 onClick={() => setSelectedScan(null)}
-                className="w-full bg-tesla-dark hover:bg-black text-white text-[10px] font-semibold tracking-widest uppercase py-3 rounded-tesla transition-all"
+                className="w-full bg-slate-900 dark:bg-slate-700 hover:bg-black dark:hover:bg-slate-600 text-white text-[10px] font-semibold tracking-widest uppercase py-3 rounded-xl transition-all"
               >
                 Tutup Rincian
               </button>

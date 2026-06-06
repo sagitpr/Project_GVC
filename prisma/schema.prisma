@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model analytics {
+  id               String   @id
+  date             DateTime @unique @default(now())
+  total_scans      Int      @default(0)
+  plastic_scans    Int      @default(0)
+  organic_scans    Int      @default(0)
+  paper_scans      Int      @default(0)
+  glass_scans      Int      @default(0)
+  electronic_scans Int      @default(0)
+  metal_scans      Int      @default(0)
+  carbon_reduced   Float    @default(0.0)
+}
+
+model claimed_rewards {
+  id         String   @id
+  user_id    String
+  reward_id  String
+  status     String   @default("CLAIMED")
+  created_at DateTime @default(now())
+  rewards    rewards  @relation(fields: [reward_id], references: [id], onDelete: Cascade)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([reward_id])
+  @@index([user_id])
+}
+
+model community_posts {
+  id          String   @id
+  user_id     String
+  title       String
+  content     String
+  image_url   String?
+  likes_count Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime
+  users       users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model eco_points {
+  id            String   @id
+  user_id       String
+  points        Int
+  activity_type String
+  description   String?
+  created_at    DateTime @default(now())
+  users         users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model education_content {
+  id         String   @id
+  title      String
+  category   String
+  content    String
+  image_url  String?
+  video_url  String?
+  created_at DateTime @default(now())
+  updated_at DateTime
+
+  @@index([category])
+}
+
+model marketplace {
+  id             String   @id
+  seller_id      String
+  title          String
+  description    String?
+  waste_category String
+  weight         Float
+  price          Float
+  image_url      String?
+  status         String   @default("AVAILABLE")
+  created_at     DateTime @default(now())
+  updated_at     DateTime
+  users          users    @relation(fields: [seller_id], references: [id], onDelete: Cascade)
+
+  @@index([seller_id])
+  @@index([status])
+  @@index([waste_category])
+}
+
+model notifications {
+  id         String   @id
+  user_id    String
+  title      String
+  message    String
+  is_read    Boolean  @default(false)
+  type       String   @default("SYSTEM")
+  created_at DateTime @default(now())
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([is_read])
+  @@index([user_id])
+}
+
+model pickups {
+  id                             String    @id
+  user_id                        String
+  driver_id                      String?
+  status                         String    @default("PENDING")
+  waste_category                 String
+  weight                         Float
+  address                        String
+  latitude                       Float?
+  longitude                      Float?
+  pickup_time                    DateTime?
+  created_at                     DateTime  @default(now())
+  updated_at                     DateTime
+  users_pickups_driver_idTousers users?    @relation("pickups_driver_idTousers", fields: [driver_id], references: [id])
+  users_pickups_user_idTousers   users     @relation("pickups_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([driver_id])
+  @@index([status])
+  @@index([user_id])
+}
+
+model rewards {
+  id              String            @id
+  title           String
+  description     String?
+  points_required Int
+  code            String?
+  stock           Int               @default(0)
+  image_url       String?
+  created_at      DateTime          @default(now())
+  updated_at      DateTime
+  claimed_rewards claimed_rewards[]
+}
+
+model scans {
+  id         String   @id
+  user_id    String
+  image_url  String
+  category   String
+  confidence Float
+  brand      String?
+  eco_score  Int
+  ocr_text   String?
+  tips       String
+  created_at DateTime @default(now())
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([category])
+  @@index([user_id])
+}
+
+model transactions {
+  id          String   @id
+  wallet_id   String
+  amount      Float
+  type        String
+  description String?
+  created_at  DateTime @default(now())
+  wallets     wallets  @relation(fields: [wallet_id], references: [id], onDelete: Cascade)
+
+  @@index([wallet_id])
+}
+
+model users {
+  id                               String            @id
+  email                            String            @unique
+  username                         String            @unique
+  password                         String
+  eco_points_col                    Int               @default(0) @map("eco_points")
+  eco_coins                        Int               @default(0)
+  wallet_balance                   Float             @default(0.0)
+  created_at                       DateTime          @default(now())
+  updated_at                       DateTime
+  claimed_rewards                  claimed_rewards[]
+  community_posts                  community_posts[]
+  eco_points                       eco_points[]
+  marketplace                      marketplace[]
+  notifications                    notifications[]
+  pickups_pickups_driver_idTousers pickups[]         @relation("pickups_driver_idTousers")
+  pickups_pickups_user_idTousers   pickups[]         @relation("pickups_user_idTousers")
+  scans                            scans[]
+  wallets                          wallets?
+}
+
+model wallets {
+  id           String         @id
+  user_id      String         @unique
+  balance      Float          @default(0.0)
+  currency     String         @default("IDR")
+  created_at   DateTime       @default(now())
+  updated_at   DateTime
+  transactions transactions[]
+  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}

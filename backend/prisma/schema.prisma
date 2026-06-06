@@ -8,39 +8,212 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  username  String   @unique
-  password  String
-  ecoPoints Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  scans     Scan[]
+  id            String               @id @default(uuid())
+  email         String               @unique
+  username      String               @unique
+  password      String
+  ecoPoints     Int                  @default(0) @map("eco_points")
+  ecoCoins      Int                  @default(0) @map("eco_coins")
+  walletBalance Float                @default(0.0) @map("wallet_balance")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+  
+  scans            Scan[]
+  marketplace      MarketplaceListing[]
+  pickupsRequested Pickup[]             @relation("UserPickups")
+  pickupsCollected Pickup[]             @relation("DriverPickups")
+  wallet           Wallet?
+  ecoPointLogs     EcoPoint[]
+  posts            CommunityPost[]
+  claims           ClaimedReward[]
+  notifications    Notification[]
+
+  @@map("users")
 }
 
 model Scan {
   id         String   @id @default(uuid())
-  userId     String
+  userId     String   @map("user_id")
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  imageUrl   String
+  imageUrl   String   @map("image_url")
   category   String   // PLASTIC, ORGANIC, PAPER, GLASS, ELECTRONIC, METAL, OTHERS
   confidence Float    // AI confidence percentage (0.0 - 1.0)
   brand      String?  // OCR brand name result
-  ecoScore   Int      // Eco Score (0 - 100)
-  ocrText    String?  // Raw text extracted by OCR
+  ecoScore   Int      @map("eco_score") // Eco Score (0 - 100)
+  ocrText    String?  @map("ocr_text")  // Raw text extracted by OCR
   tips       String   // Recycling tips and advice from Gemini API
-  createdAt  DateTime @default(now())
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([category])
+  @@map("scans")
+}
+
+model MarketplaceListing {
+  id            String   @id @default(uuid())
+  sellerId      String   @map("seller_id")
+  seller        User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  wasteCategory String   @map("waste_category") // PLASTIC, ORGANIC, etc.
+  weight        Float    // in kg
+  price         Float    // pricing
+  imageUrl      String?  @map("image_url")
+  status        String   @default("AVAILABLE") // AVAILABLE, SOLD, CANCELLED
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([sellerId])
+  @@index([wasteCategory])
+  @@index([status])
+  @@map("marketplace")
+}
+
+model Pickup {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  user          User      @relation("UserPickups", fields: [userId], references: [id], onDelete: Cascade)
+  driverId      String?   @map("driver_id")
+  driver        User?     @relation("DriverPickups", fields: [driverId], references: [id], onDelete: SetNull)
+  status        String    @default("PENDING") // PENDING, ASSIGNED, COMPLETED, CANCELLED
+  wasteCategory String    @map("waste_category")
+  weight        Float     // in kg
+  address       String
+  latitude      Float?
+  longitude     Float?
+  pickupTime    DateTime? @map("pickup_time")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([driverId])
+  @@index([status])
+  @@map("pickups")
+}
+
+model Wallet {
+  id           String        @id @default(uuid())
+  userId       String        @unique @map("user_id")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balance      Float         @default(0.0)
+  currency     String        @default("IDR")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  transactions Transaction[]
+
+  @@map("wallets")
+}
+
+model EcoPoint {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  points       Int
+  activityType String   @map("activity_type") // SCAN, PICKUP, CHALLENGE, REDEEM
+  description  String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("eco_points")
+}
+
+model Reward {
+  id             String          @id @default(uuid())
+  title          String
+  description    String?
+  pointsRequired Int             @map("points_required")
+  code           String?         // Promo or voucher code
+  stock          Int             @default(0)
+  imageUrl       String?         @map("image_url")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  claims         ClaimedReward[]
+
+  @@map("rewards")
+}
+
+model ClaimedReward {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rewardId  String   @map("reward_id")
+  reward    Reward   @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+  status    String   @default("CLAIMED") // CLAIMED, USED
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([rewardId])
+  @@map("claimed_rewards")
+}
+
+model CommunityPost {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  content    String
+  imageUrl   String?  @map("image_url")
+  likesCount Int      @default(0) @map("likes_count")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("community_posts")
 }
 
 model AnalyticsSummary {
   id              String   @id @default(uuid())
   date            DateTime @unique @default(now())
-  totalScans      Int      @default(0)
-  plasticScans    Int      @default(0)
-  organicScans    Int      @default(0)
-  paperScans      Int      @default(0)
-  glassScans      Int      @default(0)
-  electronicScans Int      @default(0)
-  metalScans      Int      @default(0)
-  carbonReduced   Float    @default(0.0) // Estimate in kg of CO2 equivalent
+  totalScans      Int      @default(0) @map("total_scans")
+  plasticScans    Int      @default(0) @map("plastic_scans")
+  organicScans    Int      @default(0) @map("organic_scans")
+  paperScans      Int      @default(0) @map("paper_scans")
+  glassScans      Int      @default(0) @map("glass_scans")
+  electronicScans Int      @default(0) @map("electronic_scans")
+  metalScans      Int      @default(0) @map("metal_scans")
+  carbonReduced   Float    @default(0.0) @map("carbon_reduced") // in kg CO2 equivalent
+
+  @@map("analytics")
+}
+
+model EducationContent {
+  id        String   @id @default(uuid())
+  title     String
+  category  String   // e.g. PLASTIC, COMPOSTING, SMART_CITY
+  content   String
+  imageUrl  String?  @map("image_url")
+  videoUrl  String?  @map("video_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@map("education_content")
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  walletId    String   @map("wallet_id")
+  wallet      Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  amount      Float
+  type        String   // DEPOSIT, WITHDRAWAL, TRANSFER, EARN
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([walletId])
+  @@map("transactions")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  isRead    Boolean  @default(false) @map("is_read")
+  type      String   @default("SYSTEM") // SYSTEM, TRANSACTION, PICKUP, ALERT
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([isRead])
+  @@map("notifications")
 }

@@ -1,442 +1,245 @@
-AI-Based Smart Waste Classification & Recycling Ecosystem
-1. PROJECT OVERVIEW
+# ==============================================================================
+# SMARTSORT AI ECOSYSTEM
+# ==============================================================================
+# National Circular Economy & Resource Recovery Network
+# Document Version: 3.0 (Resource Recovery, Smart City, Sustainability)
+# ==============================================================================
 
-SMARTSORT AI adalah platform berbasis Artificial Intelligence yang membantu pengguna memilah sampah secara otomatis menggunakan kamera dan AI Vision.
+# 1. SYSTEM OBJECTIVES & TARGET
+* **Primary Target**: National Circular Economy & Resource Recovery Ecosystem
+* **Platform Vision**: Menghubungkan masyarakat, sekolah, kampus, UMKM, bank sampah, 
+  dinas lingkungan hidup, pemerintah daerah, dan perusahaan pengolah daur ulang 
+  dalam satu ekosistem circular economy nasional.
+* **Core Mission**: Mengubah sampah menjadi sumber daya yang dapat diolah kembali 
+  menjadi produk bermanfaat bagi masyarakat.
+* **Production Status**: Production-Ready, Cloud-Native, Google Cloud SQL & Cloud Run compliant.
 
-Sistem dapat:
+---
 
-Mengenali jenis sampah
-Mengklasifikasikan kategori sampah
-Memberikan rekomendasi daur ulang
-Menghitung eco-score
-Menyimpan histori scan
-Menampilkan statistik lingkungan
+# 2. KEY ARCHITECTURAL PRINCIPLES
+1. **Resource Recovery First**: Setiap material yang masuk ke ekosistem memiliki 
+   jalur pengolahan yang jelas menuju mitra industri pengolah terverifikasi.
+2. **Decoupled Stateless Architecture**: Compute microservices run in serverless 
+   containers (Google Cloud Run), dynamically scaling based on concurrent demand.
+3. **Third Normal Form (3NF) Database Integrity**: Fully normalized 12-table PostgreSQL 
+   engine with optimized B-Tree indexes, UUID safety, and secure relational cascade boundaries.
+4. **Multimodal AI Vision & OCR Pipeline**: Single-roundtrip processing via Gemini 1.5 Flash 
+   structured schemas, rate-limited at database levels to control API quotas. AI adalah 
+   **pendukung ekosistem**, bukan fitur utama.
+5. **PWA & Offline-First Operations**: Employs Service Workers and local caching 
+   (IndexedDB/LocalStorage) to allow scans and transactions during offline states, 
+   synchronizing logs via background workers when connection is active.
+6. **Secure Transactional Ledger**: Immutable financial transactions tracking double-entry 
+   token balances for Eco Coins contributions.
 
-Project ini dibuat untuk:
+---
 
-Smart City
-Edukasi lingkungan
-Sekolah
-Kampus
-UMKM
-Kompetisi AI
-Google AI Studio
-Cloud Run deployment
-2. MAIN PROBLEMS
+# 3. DETAILED COMPONENT ARCHITECTURE
 
-Masalah yang diselesaikan:
+```mermaid
+erDiagram
+    users ||--o{ scans : "performs"
+    users ||--o{ pickups : "requests"
+    users ||--o| wallets : "owns"
+    users ||--o{ eco_points : "earns"
+    users ||--o{ community_posts : "writes"
+    users ||--o{ claimed_rewards : "claims"
+    users ||--o{ notifications : "receives"
+    users ||--o{ waste_deposits : "deposits"
+    rewards ||--o{ claimed_rewards : "redeemed_by"
+    wallets ||--o{ transactions : "logs"
+    waste_deposits ||--o{ partner_processors : "processed_by"
+    waste_deposits ||--o{ impact_logs : "generates"
+```
 
-Banyak orang tidak tahu kategori sampah
-Salah pembuangan sampah
-Rendahnya kesadaran daur ulang
-Tidak ada edukasi realtime
-Sulit memilah sampah manual
-Tidak ada sistem AI lingkungan sederhana
-3. CORE FEATURES
-A. AI WASTE DETECTION
+## A. PROGRESSIVE WEB APP (FRONTEND LAYER)
+* **Framework**: Next.js 14 (App Router) + React + TypeScript + Tailwind CSS + Framer Motion.
+* **PWA Configurations**:
+  * **manifest.json**: Configured for standalone immersive app shell, custom icons, and theme colors.
+  * **Service Worker**: Caches main shells, visual components, page states, and manages background queue synchronizations.
+  * **Offline Mode**: Local storage caches scan history and user profiles. Scans captured during 
+    offline connectivity are placed in an IndexedDB queue and automatically pushed upon internet recovery.
+* **Visual Identity**: Eco-tech clean design with emerald-teal-cyan palette, sustainability-first 
+  visual language, frosted-glass morphic controls, fluid transitions, skeleton load states, 
+  and full dark-mode assets.
+* **Key Pages**: Landing (National Problem → How It Works → Recovery Flow → Partners → Impact → Community → Smart City),
+  AI Scanner, Dashboard & Impact Tracking, Pickup Scheduling, Industrial Partner Network, 
+  Community & Education, Smart City Dashboard.
 
-Fungsi:
+## B. ENTERPRISE CORE API (BACKEND LAYER)
+* **Framework**: NestJS (TypeScript) with modular component-driven layout.
+* **ORM**: Prisma Client connecting to PostgreSQL.
+* **Input Validation**: Strict class-validators globally intercept and parse request payloads.
+* **Security Middleware**: Auto-injects secure HTTP headers, implements CORS rules, and rate limits.
+* **Autoscale Capacity**: Statelessly deployable to Cloud Run (scales down to 0 instances).
 
-Scan sampah menggunakan kamera
-AI mendeteksi objek
-Klasifikasi kategori sampah
-Identifikasi material
+## C. MULTIMODAL AI & OCR ENGINE
+* **AI adalah pendukung ekosistem, bukan fitur utama.**
+* **API Interface**: `google/generative-ai` invoking `gemini-1.5-flash` with structured JSON schema.
+* **Functions**:
+  1. Primary Waste Classification (PLASTIC, ORGANIC, PAPER, GLASS, ELECTRONIC, METAL, OTHERS)
+  2. OCR Parsing (text, barcodes, product identifiers, brand logos)
+  3. Eco-Score Calculation (0-100)
+  4. Panduan Daur Ulang AI (Indonesian reuse/composting/disposal tips)
+  5. Business Insights: volume prediction, processing need forecasting, recycling recommendations
+* **Fraud Prevention**: File size validation (max 5MB), MD5 checksum dedup, rate limiting (15/hour).
 
-Kategori:
+---
 
-Plastik
-Organik
-Kertas
-Kaca
-Elektronik
-Metal
+# 4. RESOURCE RECOVERY WORKFLOWS
 
-AI Output:
+## A. RESOURCE RECOVERY NETWORK (BUKAN MARKETPLACE)
+**SMARTSORT bukan marketplace jual-beli sampah.**
+**SMARTSORT adalah Resource Recovery Network.**
 
-Nama objek
-Tingkat akurasi
-Jenis sampah
-Tingkat daur ulang
-B. ECO SCORE SYSTEM
+### Alur Baru:
+```
+Masyarakat
+    ↓
+AI Scan Sampah
+    ↓
+OCR + AI Classification
+    ↓
+Validasi Kategori
+    ↓
+Setor ke SMARTSORT Network
+    ↓
+Pickup / Drop Point
+    ↓
+Sorting Center
+    ↓
+Bank Sampah Mitra
+    ↓
+Perusahaan Pengolah
+    ↓
+Produk Baru
+    ↓
+Kembali ke Masyarakat
+```
 
-AI menghitung:
+## B. SMART PICKUP SYSTEM
+* **GPS & Geolocation**: Maps integration for Smart Waste Maps (drop points, bank sampah, mitra).
+* **Kurir Routing**: Coordinate-based route optimization for pickup logistics.
+* **Status Lifecycles**: `PENDING` > `ASSIGNED` > `COMPLETED` > `CANCELLED`.
 
-Dampak lingkungan
-Tingkat pencemaran
-Tingkat daur ulang
-Eco point
+## C. DIGITAL WASTE BANK SYSTEM
+* **Saldo Setoran**: Track deposit balance per user.
+* **Histori Setoran**: Complete deposit history with impact metrics.
+* **Eco Points & Eco Coins**: Contribution tracking and reward system.
+* **BUKAN transaksi jual-beli bebas** — fokus pada kontribusi lingkungan.
+
+## D. SMART IMPACT TRACKING
+Setiap setoran material menghasilkan visualisasi dampak:
+* Kg CO₂ Terreduksi
+* Material berhasil dipulihkan
+* Produk potensial yang dapat dihasilkan
+* Setara pohon yang ditanam
 
 Contoh:
-Botol plastik:
+```
+15 Kg Plastik → Mengurangi 35 Kg CO₂
+              → Menjadi bahan baku 10 kursi taman
+              → Mendukung program lingkungan kota
+              → Mengurangi sampah ke TPA
+```
+
+## E. INDUSTRIAL PARTNER NETWORK
+Perusahaan pengolah terverifikasi yang menjadi mitra SmartSort:
+* Pengolah Plastik
+* Pengolah Organik
+* Pengolah Kertas
+* Pengolah Logam
+* Pengolah Kaca
+* Pengolah Elektronik
+
+Masyarakat tidak berinteraksi langsung dengan mitra — 
+**SMARTSORT menjadi penghubung** antara masyarakat dan industri.
+
+---
+
+# 5. COMMUNITY & SMART CITY
+
+## A. COMMUNITY IMPACT SYSTEM
+* Challenge lingkungan & eco mission
+* Program Sekolah Hijau & Kampus Hijau
+* Komunitas RT/RW Hijau
+* Leaderboard kontribusi lingkungan
+
+## B. GOVERNMENT & SMART CITY DASHBOARD
+Dashboard untuk pemerintah daerah:
+* Volume sampah per wilayah
+* Jenis sampah dominan
+* Tingkat partisipasi masyarakat
+* Tingkat daur ulang
+* Wilayah dengan kontribusi tertinggi
+
+## C. SMART WASTE FLOW VISUALIZATION
+Visualisasi alur:
+```
+Sampah → Sorting → Processing → Manufacturing → Reuse
+```
+
+User dapat melihat status:
+* "Sampah Anda sedang diproses"
+* "Sampah Anda telah menjadi bahan baku"
+* "Sampah Anda telah digunakan kembali"
+
+---
+
+# 6. DATABASE SCHEMA DEFINITION
+Fully normalized PostgreSQL structure mapped in Prisma (12 tables):
+* **users** — Profiles, email, credentials, token balances
+* **scans** — AI classification results, OCR text, eco scores
+* **pickups** — Pickup requests, driver assignments, coordinates
+* **wallets** — Digital currency holdings
+* **eco_points** — Point earnings history
+* **rewards** — Reward catalog
+* **claimed_rewards** — Reward claim records
+* **community_posts** — Community updates & alerts
+* **analytics** — Community eco impact aggregation
+* **education_content** — Educational content library
+* **transactions** — Financial transaction log
+* **notifications** — In-app notification system
+
+---
+
+# 7. OBSERVABILITY & MONITORING
+- **Sentry**: Client-side error tracking
+- **Prometheus/Grafana**: API latency, DB locks, Gemini quota, cache hit ratios
+
+---
+
+# 8. SCALABLE DEVELOPMENT ROADMAP
+
+```
+[ Phase 1: MVP Core ] ────► [ Phase 2: Ecosystem ] ────► [ Phase 3: Smart City ]
+  - AI Scanner & OCR          - Resource Recovery Hub       - Government Dashboard
+  - Auth & Profile             - Industrial Partner Network  - Smart Waste Maps
+  - Pickup Scheduling          - Smart Impact Tracking       - IoT Smart Bin APIs
+  - Aggregated Analytics       - Community System            - Real-time City Analytics
+  - Digital Waste Bank         - Education Center            - B2B/B2G Services
+```
+
+---
+
+# 9. PRODUCTION DEPLOYMENT
+* **GCP Cloud Run**: Stateless container deployment
+* **Container Registry**: Artifact Registry
+* **Secret Management**: Google Secret Manager (GEMINI_API_KEY, JWT_SECRET)
+* **Database**: Google Cloud SQL PostgreSQL 15
+
+---
+
+# 10. AI BUSINESS INSIGHT USAGE
+AI digunakan sebagai **pendukung ekosistem** untuk:
+* Klasifikasi sampah (primary function)
+* Prediksi volume sampah
+* Prediksi kebutuhan pengolahan
+* Rekomendasi pemanfaatan hasil daur ulang
+
+JANGAN menjadikan AI sebagai fitur utama — AI adalah alat bantu ekosistem.
 
-Recyclable: 85%
-Eco score: 70/100
-C. AI RECYCLING RECOMMENDATION
+---
 
-Sistem memberi:
-
-Cara daur ulang
-Cara pembuangan
-Estimasi waktu terurai
-Rekomendasi reuse
-
-Contoh:
-“Botol plastik dapat digunakan kembali sebagai pot tanaman.”
-
-D. OCR LABEL DETECTION
-
-OCR membaca:
-
-Label produk
-Logo brand
-Barcode
-Teks kemasan
-
-Tujuan:
-
-Membantu klasifikasi lebih akurat
-E. USER HISTORY
-
-Menyimpan:
-
-Histori scan
-Total sampah
-Eco point
-Statistik pengguna
-F. ANALYTICS DASHBOARD
-
-Dashboard:
-
-Total scan
-Kategori terbanyak
-Grafik penggunaan
-Eco impact
-Carbon reduction estimation
-4. SYSTEM ARCHITECTURE
-FRONTEND LAYER
-
-Framework:
-
-Next.js
-React.js
-Tailwind CSS
-TypeScript
-
-Modules:
-
-Camera Scanner
-Dashboard
-History
-Analytics
-Eco Score Page
-BACKEND LAYER
-
-Framework:
-
-Django REST Framework
-FastAPI untuk AI service
-
-Microservices:
-
-Authentication Service
-AI Vision Service
-OCR Service
-Recommendation Service
-Analytics Service
-User History Service
-AI LAYER
-Computer Vision
-
-Teknologi:
-
-YOLOv8
-OpenCV
-TensorFlow
-
-Tugas:
-
-Object detection
-Waste classification
-OCR Engine
-
-Teknologi:
-
-EasyOCR
-Tesseract OCR
-Gemini Vision
-
-Tugas:
-
-Membaca label produk
-Barcode recognition
-AI Recommendation Engine
-
-Teknologi:
-
-Gemini API
-NLP System
-
-Tugas:
-
-Memberikan saran daur ulang
-Edukasi lingkungan
-5. DATABASE ARCHITECTURE
-Main Database
-
-Database:
-
-PostgreSQL atau MariaDB
-
-Tables:
-
-users
-id
-username
-email
-password
-eco_points
-scans
-id
-user_id
-image
-category
-confidence
-eco_score
-created_at
-recycling_recommendations
-id
-category
-recommendation
-recycle_level
-analytics
-id
-total_scans
-waste_type
-created_at
-6. CLOUD ARCHITECTURE
-GOOGLE CLOUD PLATFORM
-
-Services:
-
-Compute
-Cloud Run
-Cloud Functions
-AI
-Gemini API
-Vertex AI
-Database
-Cloud SQL
-Storage
-Google Cloud Storage
-Monitoring
-Cloud Logging
-Cloud Monitoring
-7. COMPLETE DATA FLOW
-FLOW 1 - WASTE SCANNING
-User membuka kamera
-Kamera mengambil gambar
-Frontend mengirim image ke backend
-Backend meneruskan ke AI Vision Service
-YOLO mendeteksi objek
-OCR membaca label
-AI menentukan kategori
-AI menghitung eco score
-Recommendation Engine memberi saran
-Data disimpan ke database
-Dashboard update realtime
-8. API STRUCTURE
-AUTH API
-
-/api/auth/register
-/api/auth/login
-
-AI API
-
-/api/ai/detect
-/api/ai/ocr
-/api/ai/recommendation
-
-HISTORY API
-
-/api/history/list
-/api/history/detail
-
-ANALYTICS API
-
-/api/analytics/dashboard
-
-9. MACHINE LEARNING PIPELINE
-TRAINING PIPELINE
-Dataset collection
-Data labeling
-Data preprocessing
-Model training
-Evaluation
-Deployment
-Monitoring
-
-Dataset:
-
-TrashNet
-Open Images Dataset
-Custom Waste Dataset
-10. SECURITY ARCHITECTURE
-Authentication
-JWT Authentication
-OAuth2
-Security
-HTTPS
-Rate limiting
-API protection
-Storage Security
-Encrypted image storage
-Secure cloud bucket
-11. PROJECT STRUCTURE
-
-/project-root
-│
-├── frontend/
-│ ├── components/
-│ ├── pages/
-│ ├── dashboard/
-│ └── scanner/
-│
-├── backend/
-│ ├── auth-service/
-│ ├── ai-service/
-│ ├── analytics-service/
-│ └── recommendation-service/
-│
-├── ai-models/
-│ ├── yolo/
-│ ├── ocr/
-│ └── classification/
-│
-├── database/
-├── docker/
-├── deployment/
-└── docs/
-
-12. UI / PAGE STRUCTURE
-Pages
-Landing Page
-Hero section
-AI explanation
-Eco statistics
-Login/Register
-AI Camera Scanner
-Camera preview
-Capture button
-Detection result
-Result Page
-Waste category
-Eco score
-Recycling recommendation
-Dashboard
-Scan statistics
-Eco points
-Graphs
-History Page
-Previous scans
-Details
-13. DEVOPS ARCHITECTURE
-CI/CD
-
-Tools:
-
-GitHub Actions
-Docker
-Cloud Build
-
-Pipeline:
-
-Push repository
-Automatic testing
-Docker build
-Deploy Cloud Run
-Monitoring
-14. DEPLOYMENT STRATEGY
-Development
-Localhost
-Docker Compose
-Production
-Google Cloud Run
-Auto scaling enabled
-CDN support
-15. MVP VERSION
-
-Versi awal yang realistis:
-
-Login system
-AI camera detection
-Waste classification
-Eco score
-History scan
-Dashboard sederhana
-Cloud deployment
-16. FUTURE FEATURES
-
-Pengembangan lanjutan:
-
-AR waste education
-Smart trash bin IoT
-Gamification eco points
-AI chatbot lingkungan
-Realtime city waste analytics
-Face recognition reward system
-17. MONETIZATION
-
-Model bisnis:
-
-B2B
-Sekolah
-Kampus
-Smart City
-Subscription
-Premium analytics
-Government Partnership
-Environmental monitoring
-18. WHY THIS PROJECT IS STRONG
-
-Keunggulan:
-
-Mudah dipahami
-Demo AI sangat visual
-UI sederhana
-Real problem solving
-Cocok untuk AI competition
-Bisa cepat dibuat
-Scalable
-Cloud-native
-AI Vision jelas
-Impact lingkungan tinggi
-19. RECOMMENDED TECH STACK
-
-Frontend:
-
-Next.js
-Tailwind CSS
-TypeScript
-
-Backend:
-
-Django REST Framework
-FastAPI
-
-AI:
-
-YOLOv8
-OpenCV
-Gemini API
-EasyOCR
-
-Cloud:
-
-Google Cloud Run
-Firebase
-Cloud Storage
-
-Database:
-
-PostgreSQL
-Redis
+# END OF ARCHITECTURE.TXT
+# ==============================================================================
